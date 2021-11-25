@@ -1,6 +1,9 @@
-# IDE
+# Development environment
 .idea/
-
+dev.md
+evaluation/results/
+evaluation/bugs/
+evaluation/bigfuzz/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
