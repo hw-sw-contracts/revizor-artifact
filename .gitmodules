@@ -1,0 +1,3 @@
+[submodule "revizor"]
+	path = revizor
+	url = https://github.com/hw-sw-contracts/revizor
