@@ -75,7 +75,7 @@ The fuzzer is controlled via a single command line interface `cli.py` (located i
 * `--timeout TIMEOUT` - run fuzzing with a time limit [seconds]
 * `--nonstop` - don't stop after detecting a contract violation
 
-## Basic Usability Test: Detecting Spectre V1 (5 human-minutes + XX compute-minutes)
+## Basic Usability Test: Detecting Spectre V1 (5 human-minutes + 20 compute-minutes)
 
 1. Run acceptance tests:
 ```bash
@@ -85,21 +85,35 @@ cd revizor/src/tests
 
 If a few (up to 3) "Detection" tests fail, it's fine, you might just have a slightly different microarchitecture. But if other tests fail - something is broken. Let us know.
 
-2. Fuzz in a violation-free configuration:
+2. Fuzz in a configuration with a known contract violation (Spectre V1):
+```bash
+./revizor/src/cli.py fuzz -s x86.xml -i 50 -n 1000 -v -c ../evaluation/test-detection.yaml
+```
+
+A violation should be detected within a few minutes, with a message similar to this:
+
+```
+================================ Violations detected ==========================
+  Contract trace (hash):
+
+    0111010000011100111000001010010011110101110011110100000111010110
+  Hardware traces:
+   Inputs [907599882]:
+    _____^______^______^___________________________________________^
+   Inputs [2282448906]:
+    ___________________^_____^___________________________________^_^
+
+```
+
+
+You can find the test case that triggered this violation in `generated.asm`.
+
+3. Fuzz in a violation-free configuration:
 ```bash
 ./revizor/src/cli.py fuzz -s x86.xml -i 50 -n 100 -v -c evaluation/test-nondetection.yaml
 ```
 
 No violations should be detected.
-
-3. Fuzz in a configuration with a known contract violation (Spectre V1):
-```bash
-./revizor/src/cli.py fuzz -s x86.xml -i 50 -n 1000 -v -c ../evaluation/test-detection.yaml
-```
-
-A violation should be detected within a few minutes.
-
-You can find the test case that triggered this violation in `generated.asm`.
 
 ## Experiment 1: Name (XX human-minutes + XX compute-minutes)
 
