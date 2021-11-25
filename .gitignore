@@ -4,6 +4,7 @@ dev.md
 evaluation/results/
 evaluation/bugs/
 evaluation/bigfuzz/
+.lsync_coffee
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

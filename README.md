@@ -48,12 +48,13 @@ Optionally (and it *really* is optional), you can boot the kernel on a single co
 git submodule update --init --recursive
 ```
 
-2. Copy the x86 ISA description:
+2. Copy the ISA description:
 ```bash
 cp revizor/src/executor/x86/base.xml revizor/src/instruction_sets/x86
+cp revizor/src/executor/x86/base.xml x86.xml
 ```
 
-3. Install the x86 executor:
+3. Install the executor:
 ```bash
 cd revizor/src/executor/x86 
 sudo rmmod x86-executor
@@ -62,34 +63,43 @@ make
 sudo insmod x86-executor.ko
 ```
 
-4. (Optionally) Run test:
+## Command line interface to Revizor
+
+The fuzzer is controlled via a single command line interface `cli.py` (located in `revizor/src/cli.py`). It accepts the following arguments:
+
+* `-s, --instruction-set PATH` - path to the ISA description file
+* `-c, --config PATH` - path to the fuzzing configuration file
+* `-n , --num-test-cases N` - number of test cases to be tested
+* `-i , --num-inputs N` - number of inputs per test case
+* `-t , --testcase PATH` - use an existing test case instead of generating random test cases
+* `--timeout TIMEOUT` - run fuzzing with a time limit [seconds]
+* `--nonstop` - don't stop after detecting a contract violation
+
+## Basic Usability Test: Detecting Spectre V1 (5 human-minutes + XX compute-minutes)
+
+1. Run acceptance tests:
 ```bash
-cd src/tests
+cd revizor/src/tests
 ./runtests.sh
 ```
 
 If a few (up to 3) "Detection" tests fail, it's fine, you might just have a slightly different microarchitecture. But if other tests fail - something is broken. Let us know.
 
-## Basic Usability Test: Detecting Spectre V1 (5 human-minutes + XX compute-minutes)
-
-TODO
-
-This fuzzing command will call the fuzzer and execute 10 fuzzing iterations in a configuration that is not expected to find any vulnerabilities.
+2. Fuzz in a violation-free configuration:
 ```bash
-cd revizor/src/
-./cli.py fuzz -s instruction_sets/x86/base.xml -i 1000 -n 10 -v -c ../evaluation/1_fuzzing_main/bm-bpas.yaml
+./revizor/src/cli.py fuzz -s x86.xml -i 50 -n 100 -v -c evaluation/test-nondetection.yaml
 ```
 
-This one should detect a violations within several minutes.
-The detected violation is most likely an instance of Spectre V1.
+No violations should be detected.
 
+3. Fuzz in a configuration with a known contract violation (Spectre V1):
 ```bash
-cd revizor/src/
-./cli.py fuzz -s instruction_sets/x86/base.xml -i 50 -n 1000 -v -c ../evaluation/fast-spectre-v1.yaml
+./revizor/src/cli.py fuzz -s x86.xml -i 50 -n 1000 -v -c ../evaluation/test-detection.yaml
 ```
 
-You can find the test case that triggered this violation in `src/generated.asm`.
+A violation should be detected within a few minutes.
 
+You can find the test case that triggered this violation in `generated.asm`.
 
 ## Experiment 1: Name (XX human-minutes + XX compute-minutes)
 
