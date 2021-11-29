@@ -87,7 +87,7 @@ If a few (up to 3) "Detection" tests fail, it's fine, you might just have a slig
 
 2. Fuzz in a configuration with a known contract violation (Spectre V1):
 ```bash
-./revizor/src/cli.py fuzz -s x86.xml -i 50 -n 1000 -v -c ../evaluation/test-detection.yaml
+./revizor/src/cli.py fuzz -s x86.xml -i 50 -n 1000 -v -c test-detection.yaml
 ```
 
 A violation should be detected within a few minutes, with a message similar to this:
@@ -109,7 +109,7 @@ You can find the test case that triggered this violation in `generated.asm`.
 
 3. Fuzz in a violation-free configuration:
 ```bash
-./revizor/src/cli.py fuzz -s x86.xml -i 50 -n 100 -v -c evaluation/test-nondetection.yaml
+./revizor/src/cli.py fuzz -s x86.xml -i 50 -n 100 -v -c test-nondetection.yaml
 ```
 
 No violations should be detected.
