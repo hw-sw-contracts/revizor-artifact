@@ -105,7 +105,6 @@ A violation should be detected within a few minutes, with a message similar to t
 
 ```
 
-
 You can find the test case that triggered this violation in `generated.asm`.
 
 3. Fuzz in a violation-free configuration:
@@ -115,14 +114,95 @@ You can find the test case that triggered this violation in `generated.asm`.
 
 No violations should be detected.
 
-## Experiment 1: Name (XX human-minutes + XX compute-minutes)
+## Experiment 1: Reproducing fuzzing results (XX human-minutes + XX compute-minutes)
 
-TODO
+### Claims
 
-## Experiment 2: Name (XX human-minutes + XX compute-minutes)
+* Abstract
 
-TODO
+```text
+Revizor automatically detects violations of a rich set of contracts,
+or indicates their absence. A highlight of our findings is that Revizor 
+managed to automatically surface Spectre, MDS, and LVI.
+```
 
-## Experiment 3: Name (XX human-minutes + XX compute-minutes)
+* Introduction
 
-TODO
+```text
+1. When testing a patched Skylake against a restrictive contract that 
+states that speculation exposes no information, Revizor detects a violation
+within a few minutes. Inspection shows the violation stems from the leakage
+during branch prediction, i.e. a representative of Spectre V1.
+2. When testing Skylake with V4 patch disabled against a contract that
+permits leakage during branch prediction (and is hence not violated by V1),
+Revizor detects a violation due to address prediction, i.e., a representative
+of Spectre V4.
+3. When further weakening the contract to permit leaks during both types 
+of speculation, Revizor still detects a violation. This violation is a novel
+(minor) variant of Spectre where the timing of variable-latency instructions
+(which is not permitted to leak according to the contract) leaks into L1D
+through a race condition induced by speculation.
+4. When making microcode assists possible during collection of the hardware
+traces, Revizor surfaces MDS [40, 5] on the same CPU and LVI-Null [39] on 
+a CPU with microcode patch against MDS.
+```
+
+```text
+The analysis is robust and did not produce false positives
+```
+
+* Evaluation: Table 3 and Section 6.2
+
+* Conclusion
+
+```text
+The detected violations include known vulnerabilities such Spectre, MDS, 
+and LVI, as well as novel variants.
+```
+
+### Validating the Claims
+
+## Experiment 2: Reproducing speculative store eviction (XX human-minutes + XX compute-minutes)
+
+### Claims
+
+* Abstract
+```text
+A highlight of our findings is that Revizor managed to automatically 
+surface [...] several previously unknown variants.
+```
+
+* Introduction
+```text
+When used to validate an assumption that stores do not modify the cache
+state until they retire, made in recent defence proposals, Revizor 
+discovered that this assumption does not hold in Coffee Lake.
+```
+
+* Evaluation: Section 6.4
+
+### Validating the Claims
+
+
+## Experiment 3: Fuzzing speed and detection time (XX human-minutes + XX compute-minutes)
+
+### Claims
+
+* Introduction
+```text
+In terms of speed, Revizor processes over 200 test cases per hour for complex
+contracts, and with several hundreds of inputs per test case,
+```
+
+* Evaluation: Section 6.5, Table 4 and Table 5
+
+### Validating the Claims
+
+
+## Experiment 4: Reproducing ARCH-SEQ violation (XX human-minutes + XX compute-minutes)
+
+### Claims
+
+* Evaluation: Section 6.6 and Figure 6
+
+### Validating the Claims
