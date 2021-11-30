@@ -221,7 +221,7 @@ You can find the counterexample test case in the results' directory, named `viol
 
 This will fuzz the test case against CT-COND, which permits speculative store eviction. The fuzzing is expected to complete with no violations.
 
-## Experiment 3: Fuzzing speed and detection time (XX human-minutes + XX compute-minutes)
+## Experiment 3: Fuzzing speed and detection time (20 human-minutes + XX compute-minutes)
 
 ### Claims
 
@@ -235,7 +235,19 @@ contracts, and with several hundreds of inputs per test case,
 
 ### Validating the Claims
 
-### Expected Result
+1. To measure the fuzzing speed, simply run Revizor for an hour in a configuration that does not find violations:
+```bash
+./revizor/src/cli.py fuzz -s x86.xml -i 200 -n 100000 --timeout 3600 -v -c test-nondetection.yaml
+```
+
+It should complete with a line `=== Statistics ===` followed by some statistics on the fuzzing run. The line "Test Cases: ..." is the total number of executed test cases, and "Inputs per test case: ..." is the number of inputs.
+
+2. To measure the detection speed (Table 4), execute:
+```bash
+./experiment_3a_detection_speed/run.sh
+```
+
+TODO
 
 
 ## Experiment 4: Reproducing ARCH-SEQ violation (XX human-minutes + XX compute-minutes)
@@ -246,4 +258,15 @@ contracts, and with several hundreds of inputs per test case,
 
 ### Validating the Claims
 
-### Expected Result
+Execute:
+```shell
+./experiment_4_arch_vs_ct/run.sh
+```
+
+It will test the CPU against CT-SEQ and ARCH-SEQ.
+
+The expected result is that both contracts are violated (i.e., you will see `=== Violations detected ====` twice).
+
+You can find the counterexamples for both contracts in the results' directory, named `ct-seq-violation.asm` and `arch-seq-violation.asm`.
+
+Verification of the violations requires manual analysis: `ct-seq-violation.asm` should match Fig. 6a and `arch-seq-violation.asm` Fig. 6b. As the test cases are randomly generated, it may be hard to analyse them; if you need help, send them to us.

@@ -1,34 +1,27 @@
 #!/usr/bin/env bash
 set -e
 
-if [ -z "${REVIZOR_DIR}" ]; then
-    echo "Env. variable REVIZOR_DIR must be set!"
-    exit 1
-fi
-if [ -z "${WORK_DIR}" ]; then
-    echo "Env. variable WORK_DIR must be set!"
-    exit 1
-fi
 SCRIPT=$(realpath $0)
 SCRIPT_DIR=$(dirname $SCRIPT)
-NUM_TESTS=10000
 
 timestamp=$(date '+%y-%m-%d-%H-%M')
-instructions='instruction_sets/x86/base.xml'
+revizor_src='revizor/src'
+instructions="$revizor_src/instruction_sets/x86/base.xml"
 
-mkdir -p "$WORK_DIR/$timestamp"
+exp_dir="results/experiment_2/$timestamp"
+mkdir $exp_dir
 
-for name in v1-arch-seq v1-ctr-seq v1-ct-seq   ; do
-    echo "--------------------------------------------------------------------"
-    echo "Running $name"
-    exp_dir="$WORK_DIR/$timestamp/$name"
-    conf="$WORK_DIR/$timestamp/$name.yaml"
-    mkdir -p "$exp_dir"
-    cp "$SCRIPT_DIR/$name.yaml" $conf
+log="$exp_dir/experiment.log"
+touch $log
 
-    pushd "$REVIZOR_DIR" > /dev/null
-    ./cli.py fuzz -s $instructions -c $conf -n $NUM_TESTS -i 500 -v -w $exp_dir | tee $exp_dir/log.txt
-    popd > /dev/null
-done
+# Violation of CT-SEQ
+echo "------------------ Testing against CT-SEQ ---------------------------"
+${revizor_src}/cli.py fuzz -s $instructions -n 10000 -i 100 -v -w $exp_dir -c $SCRIPT_DIR/v1-ct-seq.yaml 2>&1 | tee -a $log
+mv $exp_dir/violation*.asm $exp_dir/ct-seq-violation.asm
 
-# datamash -t, --headers  groupby 1  mean 7 < result.txt | awk 'BEGIN{FS=","} //{print $1, $2 / 60, $2 % 60}'
+# Violation of ARCH-SEQ
+echo "------------------ Testing against ARCH-SEQ ---------------------------"
+${revizor_src}/cli.py fuzz -s $instructions -n 10000 -i 100 -v -w $exp_dir -c $SCRIPT_DIR/v1-arch-seq.yaml 2>&1 | tee -a $log
+mv $exp_dir/violation*.asm $exp_dir/arch-seq-violation.asm
+
+cd - || exit
