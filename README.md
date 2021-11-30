@@ -28,8 +28,16 @@ To have stable results, the machine(s) should not be actively used by any other 
 
 * Linux v5.6+ (tested on Linux v5.6.6-300 and v5.6.13-100; there is a good chance it will work on other versions as well, but it's not guaranteed).
 * Linux Kernel Headers
-* [Unicorn 1.0.2+](https://www.unicorn-engine.org/docs/)
 * Python 3.7+
+* [Unicorn 1.0.2+](https://www.unicorn-engine.org/docs/)
+* Python bindings to Unicorn:
+```shell
+pip3 install --user unicorn
+
+# OR, if installed from sources
+cd bindings/python
+sudo make install
+```
 * Python packages `pyyaml`, `types-pyyaml`, `numpy`, `iced-x86`:
 ```shell
 pip3 install --user pyyaml types-pyyaml numpy iced-x86
@@ -39,6 +47,7 @@ For tests, also [Bash Automated Testing System](https://bats-core.readthedocs.io
 ### (Optional) System Configuration
 
 For more stable results, disable hyperthreading (there's usually a BIOS option for it).
+If you do not disable hyperthreading, you will see a warning every time you invoke Revizor; you can ignore it.
 
 Optionally (and it *really* is optional), you can boot the kernel on a single core by adding `-maxcpus=1` to the boot parameters ([how to add a boot parameter](https://wiki.ubuntu.com/Kernel/KernelBootParameters)). 
 
@@ -59,7 +68,7 @@ cp revizor/src/executor/x86/base.xml x86.xml
 3. Install the executor:
 ```bash
 cd revizor/src/executor/x86 
-sudo rmmod x86-executor
+sudo rmmod x86-executor  # the command will give an error message, but it's ok!
 make clean
 make
 sudo insmod x86-executor.ko
@@ -203,14 +212,14 @@ Execute:
 
 It will test the CPU against a version of CT-COND that does not permit cache eviction by speculative stores.
 
-The expected result is that the execution detects a violation within an hour. The script should finish with a message ```===== Violations detected ====``` followed by the description of the violation and some statistics.
+The expected result is that the execution detects a violation within an hour. The script should finish with a message ```===== Violations detected ====``` followed by the description of the violation and some statistics. (If you run this command on an earlier Intel CPU, the expected result is no violations.)
 
 You can find the counterexample test case in the results' directory, named `violation-TIMESTAMP.asm`. To verify that it is indeed the speculative store eviction, execute:
 ```shell
 ./experiment_2_speculative_store_eviction/validate.sh RESULTS_DIRECTORY/violation-TIMESTAMP.asm
 ```
 
-This will fuzz the test case against CT-COND, which permits speculative store eviction. The fuzzing is expected to complete without a violation.
+This will fuzz the test case against CT-COND, which permits speculative store eviction. The fuzzing is expected to complete with no violations.
 
 ## Experiment 3: Fuzzing speed and detection time (XX human-minutes + XX compute-minutes)
 
