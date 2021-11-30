@@ -20,7 +20,9 @@ Make sure you're not running these experiments on an important machine.
 
 ### Hardware Requirements
 
-The artifact requires at least one physical machine with an Intel CPU and with root access. Preferably, there should be two machines, one with an 8th generation (or earlier) Intel CPU and another with a 9th gen (or later) Intel CPU. To have stable results, the machine(s) should not be actively used by any other software.
+The artifact requires at least one physical machine with an Intel CPU and with root access. Preferably, there should be two machines, one with an 8th generation (or earlier) Intel CPU and another with a 9th gen (or later) Intel CPU. In the paper, we used Intel Core i7-6700 and i7-9700.
+
+To have stable results, the machine(s) should not be actively used by any other software.
 
 ### Software Requirements
 
@@ -114,6 +116,13 @@ You can find the test case that triggered this violation in `generated.asm`.
 
 No violations should be detected.
 
+## Results of experiments
+
+The results of all next experiments will be stored in a corresponding subdirectory of `results/` with a timestamp. For example, if you run Experiment 1 on 01.01.2022 at 13:00, the result will be stored in `results/experiment_1/22-01-01-13:00`.
+
+This directory will contain the experiment logs, detected violations, and aggregated results (when applicable). 
+
+
 ## Experiment 1: Reproducing fuzzing results (XX human-minutes + XX compute-minutes)
 
 ### Claims
@@ -162,7 +171,9 @@ and LVI, as well as novel variants.
 
 ### Validating the Claims
 
-## Experiment 2: Reproducing speculative store eviction (XX human-minutes + XX compute-minutes)
+### Expected Result
+
+## Experiment 2: Reproducing speculative store eviction (10 human-minutes + 60 compute-minutes)
 
 ### Claims
 
@@ -183,6 +194,23 @@ discovered that this assumption does not hold in Coffee Lake.
 
 ### Validating the Claims
 
+To reproduce this result, you will need a 9th gen Intel CPU or later (in the paper, we tested i7-9700).
+
+Execute:
+```shell
+./experiment_2_speculative_store_eviction/run.sh
+```
+
+It will test the CPU against a version of CT-COND that does not permit cache eviction by speculative stores.
+
+The expected result is that the execution detects a violation within an hour. The script should finish with a message ```===== Violations detected ====``` followed by the description of the violation and some statistics.
+
+You can find the counterexample test case in the results' directory, named `violation-TIMESTAMP.asm`. To verify that it is indeed the speculative store eviction, execute:
+```shell
+./experiment_2_speculative_store_eviction/validate.sh RESULTS_DIRECTORY/violation-TIMESTAMP.asm
+```
+
+This will fuzz the test case against CT-COND, which permits speculative store eviction. The fuzzing is expected to complete without a violation.
 
 ## Experiment 3: Fuzzing speed and detection time (XX human-minutes + XX compute-minutes)
 
@@ -198,6 +226,8 @@ contracts, and with several hundreds of inputs per test case,
 
 ### Validating the Claims
 
+### Expected Result
+
 
 ## Experiment 4: Reproducing ARCH-SEQ violation (XX human-minutes + XX compute-minutes)
 
@@ -206,3 +236,5 @@ contracts, and with several hundreds of inputs per test case,
 * Evaluation: Section 6.6 and Figure 6
 
 ### Validating the Claims
+
+### Expected Result
