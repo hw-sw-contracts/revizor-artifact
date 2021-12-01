@@ -71,6 +71,5 @@ for name in "mds-lfb.asm" "mds-sb.asm"; do
 done
 
 echo ""
-echo ""
 echo "======================== Summary =============================="
 cat $aggregated

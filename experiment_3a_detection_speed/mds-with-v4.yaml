@@ -12,7 +12,10 @@ supported_categories:
   - PUSH
 contract_observation_mode: ct
 contract_execution_mode:
-  - seq
+  - bpas
 
 enable_ssbp_patch: false
 enable_assist_page: true
+
+prng_entropy_bits: 2
+feedback_driven_generator: true

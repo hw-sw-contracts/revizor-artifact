@@ -280,9 +280,24 @@ It should complete with a line `=== Statistics ===` followed by some statistics 
 ./experiment_3a_detection_speed/run.sh
 ```
 
-The expected result is ...
+The results are expected to be close to the following:
+```text
+v4,4405
+v4-with-v4,8442
+v1,291
+v1-with-v4,228
+mds,335
+mds-with-v1,397
+mds-with-v4,423
+```
 
-TODO
+The numbers are the mean values of the amount of time to detect each of the violations.
+
+The exact numbers may differ with each execution of this experiment because the test cases are generated randomly.
+
+The meaning of the rows called "mds-*" depends on the target machine:
+If the experiment is executed on an 8th gen (or earlier) CPU, they represent MDS-type vulnerabilities.
+Otherwise, they represent LVI-type.
 
 3. To measure the detection speed on handwritten test cases (Table 5), execute:
 ```bash
