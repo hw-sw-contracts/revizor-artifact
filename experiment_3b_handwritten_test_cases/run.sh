@@ -1,38 +1,46 @@
 #!/usr/bin/env bash
 set -e
 
-if [ -z "${REVIZOR_DIR}" ]; then
-    echo "Env. variable REVIZOR_DIR must be set!"
-    exit 1
-fi
 SCRIPT=$(realpath $0)
 SCRIPT_DIR=$(dirname $SCRIPT)
 
-instructions='instruction_sets/x86/base.xml'
+timestamp=$(date '+%y-%m-%d-%H-%M')
+revizor_src='./revizor/src'
+instructions="$revizor_src/instruction_sets/x86/base.xml"
+
+exp_dir="results/experiment_3b/$timestamp"
+mkdir $exp_dir
+
+log="$exp_dir/experiment.log"
+touch $log
+result="$exp_dir/result.txt"
+touch $result
+
+aggregated="$exp_dir/aggregated.txt"
+echo 'Test Case, Average, Median, Min, Max' > $aggregated
+
 config="$SCRIPT_DIR/config.yaml"
-cd "$REVIZOR_DIR" || exit
 
 function runtest() {
     local name=$1
     local tmpl=$2
 
     case="$SCRIPT_DIR/$name"
-    echo $case
-    echo "" > results.txt
+    echo "Testing $name"
+    echo "" > $result
 
     for i in $(seq 0 99); do
         sed -e "s:@seed@:$RANDOM:g" $SCRIPT_DIR/$tmpl > $config
         for j in $(seq 2 2 64) 128 256 512 1024 2048 4096 ; do
-            ./cli.py fuzz -s $instructions -t $case -i $j -c $config > tmp.log 2>&1
+            ${revizor_src}/cli.py fuzz -s $instructions -t $case -i $j -c $config > tmp.log 2>&1
             if grep "Violations de" tmp.log -q ; then
-                echo "$j" >> results.txt
-                #echo $j
+                echo "$j" >> $result
                 break
             fi
         done
     done
 
-    cat results.txt | sort -n | awk '
+    cat $result | sort -n | awk '
           BEGIN {
             c = 0;
             sum = 0;
@@ -49,10 +57,9 @@ function runtest() {
               median = ( a[c/2] + a[c/2-1] ) / 2;
             }
             OFS="\t";
-            print "Sum", "Count", "Ave", "Med", "Min", "Max"
-            print sum, c, ave, median, a[0], a[c-1];
+            print name, ave, median, a[0], a[c-1];
           }
-        '
+        ' name=$name >> $aggregated
 }
 
 for name in "spectre_v1.asm" "spectre_v1.1.asm" "spectre_v2.asm" "spectre_v4.asm" "spectre_v5.asm"; do
@@ -63,4 +70,7 @@ for name in "mds-lfb.asm" "mds-sb.asm"; do
     runtest $name mds.yaml.tmpl
 done
 
-cd - || exit
+echo ""
+echo ""
+echo "======================== Summary =============================="
+cat $aggregated

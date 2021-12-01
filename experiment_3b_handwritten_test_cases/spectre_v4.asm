@@ -17,7 +17,7 @@ LEA rbx, [rbx + rax + 1]
 LEA rbx, [rbx + rax + 1]
 LEA rbx, [rbx + rax + 1]
 
-
+SHR rbx, 6
 AND rbx, 0b111  # reduce the range of values for rbx to 0--7
 SHL rbx, 3 # multiply by 8 to avoid collisions with the load
 

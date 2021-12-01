@@ -3,8 +3,7 @@ set -e
 
 SCRIPT=$(realpath $0)
 SCRIPT_DIR=$(dirname $SCRIPT)
-#TIMEOUT=$(( 24 * 3600 ))
-TIMEOUT=$(( 1200 ))
+TIMEOUT=$(( 24 * 3600 ))
 
 timestamp=$(date '+%y-%m-%d-%H-%M')
 revizor_src='./revizor/src'

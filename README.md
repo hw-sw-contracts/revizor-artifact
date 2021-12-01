@@ -280,7 +280,7 @@ It should complete with a line `=== Statistics ===` followed by some statistics 
 ./experiment_3a_detection_speed/run.sh
 ```
 
-The expected result ...
+The expected result is ...
 
 TODO
 
@@ -289,10 +289,24 @@ TODO
 ./experiment_3b_handwritten_test_cases/run.sh
 ```
 
-The expected result ...
+The results are expected to approximately match the following:
+```text
+Test Case, Average, Median, Min, Max
+spectre_v1.asm      7.5     7       4       12
+spectre_v1.1.asm    6       5       4       10
+spectre_v2.asm      12      11      6       20
+spectre_v4.asm      14.5    14      12      18
+spectre_v5.asm      2       2       2       4
+mds-lfb.asm         2       2       2       2
+mds-sb.asm          11.5    12      4       20
+```
 
-TODO
+The numbers are the average, median, minimum, and maximum number of inputs that was required to detect each of the violations with the given test case.
+If number of inputs is 4096 it means that the vulnerability was not detected (this script gives up testing after 4069 inputs).
 
+The exact numbers will differ slightly with each execution of this experiment, because the input generation seeds are generated randomly.
+
+*NOTE*: The last two test cases (MDS-SB and MDS-LFB) work only on an 8th gen (or earlier) Intel CPU, because the later generations are patched against MDS.
 
 ## Experiment 4: Reproducing ARCH-SEQ violation (30 human-minutes + 10 compute-hours)
 
