@@ -14,5 +14,3 @@ revizor_src='revizor/src'
 instructions="$revizor_src/instruction_sets/x86/base.xml"
 
 ${revizor_src}/cli.py fuzz -s $instructions -t $testcase -i 1000 -v -c $SCRIPT_DIR/full-ct-cond.yaml
-
-cd - || exit
