@@ -10,9 +10,12 @@ supported_categories:
   - LOGICAL
   - POP
   - PUSH
-contract_observation_mode: ct
-contract_execution_mode:
-  - cond
-  - bpas
+extended_instruction_blocklist:
+  - IDIV
+  - REX IDIV
+  - DIV
+  - REX DIV
+avg_mem_accesses: 0
+
 enable_ssbp_patch: false
 enable_assist_page: false

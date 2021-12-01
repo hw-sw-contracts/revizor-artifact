@@ -51,7 +51,7 @@ If you do not disable hyperthreading, you will see a warning every time you invo
 
 Optionally (and it *really* is optional), you can boot the kernel on a single core by adding `-maxcpus=1` to the boot parameters ([how to add a boot parameter](https://wiki.ubuntu.com/Kernel/KernelBootParameters)). 
 
-## Installing the Artifact (5 human-minutes + XX compute-minutes)
+## Installing the Artifact (5 human-minutes + 10 compute-minutes)
 
 1. Get submodules:
 ```bash
@@ -132,7 +132,7 @@ The results of all next experiments will be stored in a corresponding subdirecto
 This directory will contain the experiment logs, detected violations, and aggregated results (when applicable). 
 
 
-## Experiment 1: Reproducing fuzzing results (XX human-minutes + XX compute-minutes)
+## Experiment 1: Reproducing fuzzing results (20 human-minutes + 5 compute-days)
 
 ### Claims
 
@@ -180,7 +180,40 @@ and LVI, as well as novel variants.
 
 ### Validating the Claims
 
-### Expected Result
+Execute:
+```shell
+./experiment_1_main/run.sh
+```
+
+This script will test each of the target-contract combinations in Table 3.
+Note that the last target (called here target7-8) is dependent on the machine.
+If you execute the script on an 8th gen (or earlier) CPU, it will correspond to Target 7 in the table.
+Otherwise, it will correspond to Target 8.
+
+The expected result is that the final summary will match the following:
+```text
+Detected Violations:
+- target2 violates ct-seq
+- target2 violates ct-cond
+- target3 violates ct-seq
+- target3 violates ct-bpas  # low likelihood
+- target3 violates ct-cond
+- target3 violates ct-cond-bpas  # low likelihood
+- target5 violates ct-seq
+- target5 violates ct-bpas
+- target6 violates ct-seq
+- target6 violates ct-bpas
+- target6 violates ct-cond   # low likelihood
+- target6 violates ct-cond-bpas  # low likelihood
+- target7-8 violates ct-seq
+- target7-8 violates ct-bpas
+- target7-8 violates ct-cond
+- target7-8 violates ct-cond-bpas
+```
+
+*NOTE*: The violations of Targets 3 and 6 (called V1-var and V4-var in the paper) are very rare, and there is only a low chance that you will be able to reproduce them.
+Unfortunately, such unpredictability of the results is an unavoidable consequence of random testing.
+
 
 ## Experiment 2: Reproducing speculative store eviction (10 human-minutes + 60 compute-minutes)
 
@@ -221,7 +254,7 @@ You can find the counterexample test case in the results' directory, named `viol
 
 This will fuzz the test case against CT-COND, which permits speculative store eviction. The fuzzing is expected to complete with no violations.
 
-## Experiment 3: Fuzzing speed and detection time (20 human-minutes + XX compute-minutes)
+## Experiment 3: Fuzzing speed and detection time (30 human-minutes + 2 compute-days)
 
 ### Claims
 
@@ -247,10 +280,21 @@ It should complete with a line `=== Statistics ===` followed by some statistics 
 ./experiment_3a_detection_speed/run.sh
 ```
 
+The expected result ...
+
+TODO
+
+3. To measure the detection speed on handwritten test cases (Table 5), execute:
+```bash
+./experiment_3b_handwritten_test_cases/run.sh
+```
+
+The expected result ...
+
 TODO
 
 
-## Experiment 4: Reproducing ARCH-SEQ violation (XX human-minutes + XX compute-minutes)
+## Experiment 4: Reproducing ARCH-SEQ violation (30 human-minutes + 10 compute-hours)
 
 ### Claims
 

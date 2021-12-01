@@ -1,0 +1,15 @@
+supported_categories:
+  - NOP
+  - BINARY
+  - BITBYTE
+  - CMOV
+  - CONVERT
+  - DATAXFER
+  - FLAGOP
+  - SETCC
+  - LOGICAL
+  - POP
+  - PUSH
+
+enable_ssbp_patch: true
+enable_assist_page: false
