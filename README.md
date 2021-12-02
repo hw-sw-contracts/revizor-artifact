@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/431823229.svg)](https://zenodo.org/badge/latestdoi/431823229)
+
 # Artifact Evaluation Submission for Revizor [ASPLOS'22]
 
 **Paper**: "Revizor: Testing Black-box CPUs against Speculation Contracts"
