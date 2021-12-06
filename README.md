@@ -6,12 +6,18 @@
 
 ## Table of Contents
 
-TODO
-
 - [Requirements & Dependencies](#requirements--dependencies)
-    - [Hardware Requirements](#inputsoutputs)
+    - [Hardware Requirements](#hardware-requirements)
     - [Software Requirements](#software-requirements)
     - [(Optional) System Configuration](#optional-system-configuration)
+- [Installing the Artifact](#installing-the-artifact-5-human-minutes--10-compute-minutes)
+- [Command line interface to Revizor](#command-line-interface-to-revizor)
+- [Basic Usability Test](#basic-usability-test-detecting-spectre-v1-5-human-minutes--20-compute-minutes)
+- [Results of experiments](#results-of-experiments)
+- [Experiment 1: Reproducing fuzzing results](#experiment-1-reproducing-fuzzing-results-20-human-minutes--5-compute-days)
+- [Experiment 2: Reproducing speculative store eviction](#experiment-2-reproducing-speculative-store-eviction-10-human-minutes--60-compute-minutes)
+- [Experiment 3: Fuzzing speed and detection time](#experiment-3-fuzzing-speed-and-detection-time-30-human-minutes--2-compute-days)
+- [Experiment 4: Reproducing ARCH-SEQ violation](#experiment-4-reproducing-arch-seq-violation-30-human-minutes--10-compute-hours)
     
 ## Requirements & Dependencies
 
