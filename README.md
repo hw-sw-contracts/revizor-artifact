@@ -222,6 +222,15 @@ Detected Violations:
 *NOTE*: The violations of Targets 3 and 6 (called V1-var and V4-var in the paper) are very rare, and there is only a low chance that you will be able to reproduce them.
 Unfortunately, such unpredictability of the results is an unavoidable consequence of random testing.
 
+To check if the violations actually represent the vulnerabilities listed in Table 3, you can use the `validate.sh` script.
+For example, to check if the violation of Target 2 is representative of Spectre V4, execute:
+
+```shell
+./experiment_1_main/run.sh results/experiment_1/TIMESTAMP/target2-seq-violation.asm
+# The expected output is:
+Analysing.............
+Likely a V4-type violation
+```
 
 ## Experiment 2: Reproducing speculative store eviction (10 human-minutes + 60 compute-minutes)
 
