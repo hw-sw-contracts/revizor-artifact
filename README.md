@@ -226,10 +226,16 @@ To check if the violations actually represent the vulnerabilities listed in Tabl
 For example, to check if the violation of Target 2 is representative of Spectre V4, execute:
 
 ```shell
-./experiment_1_main/run.sh results/experiment_1/TIMESTAMP/target2-seq-violation.asm
+./experiment_1_main/validate.sh results/experiment_1/TIMESTAMP/target2-seq-violation.asm
 # The expected output is:
 Analysing.............
 Likely a V4-type violation
+```
+
+To check several violations in a batch, you might find the following one-liner helpful:
+
+```shell
+for i in results/experiment_1/TIMESTAMP/*-violation.asm ; do echo $i ; ./experiment_1_main/validate.sh $i ; echo ""; done
 ```
 
 ## Experiment 2: Reproducing speculative store eviction (10 human-minutes + 60 compute-minutes)
