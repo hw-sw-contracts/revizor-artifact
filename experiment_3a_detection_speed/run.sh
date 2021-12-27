@@ -28,16 +28,29 @@ function time_to_violation() {
 
 }
 
-for name in v4 v4-with-v1 v1 v1-with-v4 mds mds-with-v1 mds-with-v4; do
-    echo ""
-    echo "Running $name" | tee -a "$log"
-    echo ""
-    conf="$SCRIPT_DIR/$name.yaml"
+if [ "${1}" == "mds-only" ]; then
+    for name in mds mds-with-v1 mds-with-v4; do
+        echo ""
+        echo "Running $name" | tee -a "$log"
+        echo ""
+        conf="$SCRIPT_DIR/$name.yaml"
 
-    for i in $(seq 0 9); do
-        time_to_violation $conf "$name,$i"
+        for i in $(seq 0 9); do
+            time_to_violation $conf "$name,$i"
+        done
     done
-done
+else
+    for name in v4 v4-with-v1 v1 v1-with-v4 mds mds-with-v1 mds-with-v4; do
+        echo ""
+        echo "Running $name" | tee -a "$log"
+        echo ""
+        conf="$SCRIPT_DIR/$name.yaml"
+
+        for i in $(seq 0 9); do
+            time_to_violation $conf "$name,$i"
+        done
+    done
+fi
 
 echo ""
 echo "======================== Summary =============================="
