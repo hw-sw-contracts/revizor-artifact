@@ -140,7 +140,7 @@ The results of all next experiments will be stored in a corresponding subdirecto
 This directory will contain the experiment logs, detected violations, and aggregated results (when applicable). 
 
 
-## Experiment 1: Reproducing fuzzing results (20 human-minutes + 5 compute-days)
+## Experiment 1: Reproducing fuzzing results (20 human-minutes + 7-8 compute-days)
 
 ### Claims
 
