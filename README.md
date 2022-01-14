@@ -340,7 +340,6 @@ mds-sb.asm          11.5    12      4       20
 ```
 
 The numbers are the average, median, minimum, and maximum number of inputs that was required to detect each of the violations with the given test case.
-If number of inputs is 4096 it means that the vulnerability was not detected (this script gives up testing after 4069 inputs).
 
 The exact numbers will differ slightly with each execution of this experiment, because the input generation seeds are generated randomly.
 

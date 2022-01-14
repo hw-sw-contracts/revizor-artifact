@@ -1,5 +1,6 @@
 # Development environment
 .idea/
+*.code-workspace
 dev.md
 evaluation/results/
 evaluation/bugs/

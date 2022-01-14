@@ -50,6 +50,9 @@ function runtest() {
             sum += $1;
           }
           END {
+            if (c == 0) {
+              print name, "not detected";
+            }
             ave = sum / c;
             if( (c % 2) == 1 ) {
               median = a[ int(c/2) ];
