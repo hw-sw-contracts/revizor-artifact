@@ -29,7 +29,7 @@ function runtest() {
     echo "Testing $name"
     echo "" > $result
 
-    for i in $(seq 0 99); do
+    for i in $(seq 0 2); do
         sed -e "s:@seed@:$RANDOM:g" $SCRIPT_DIR/$tmpl > $config
         for j in $(seq 2 2 64) 128 256 512 1024 2048 4096 ; do
             ${revizor_src}/cli.py fuzz -s $instructions -t $case -i $j -c $config > tmp.log 2>&1
@@ -52,15 +52,16 @@ function runtest() {
           END {
             if (c == 0) {
               print name, "not detected";
-            }
-            ave = sum / c;
-            if( (c % 2) == 1 ) {
-              median = a[ int(c/2) ];
             } else {
-              median = ( a[c/2] + a[c/2-1] ) / 2;
+              ave = sum / c;
+              if( (c % 2) == 1 ) {
+                median = a[ int(c/2) ];
+              } else {
+                median = ( a[c/2] + a[c/2-1] ) / 2;
+              }
+              OFS="\t";
+              print name, ave, median, a[0], a[c-1];
             }
-            OFS="\t";
-            print name, ave, median, a[0], a[c-1];
           }
         ' name=$name >> $aggregated
 }
