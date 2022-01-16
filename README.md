@@ -50,6 +50,8 @@ sudo make install
 ```shell
 pip3 install --user pyyaml types-pyyaml numpy iced-x86
 ```
+* [GNU datamash](https://www.gnu.org/software/datamash/)
+
 For tests, also [Bash Automated Testing System](https://bats-core.readthedocs.io/en/latest/index.html) and [mypy](https://mypy.readthedocs.io/en/latest/getting_started.html#installing-and-running-mypy)
 
 ### (Optional) System Configuration
